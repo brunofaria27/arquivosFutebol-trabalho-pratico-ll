@@ -1,5 +1,3 @@
-//teste commit
-
 import java.io.*;
 import java.util.Scanner;
 
