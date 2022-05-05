@@ -1,8 +1,10 @@
 import java.io.*;
+import java.io.IOException;
 
 public class CRUD {
     private RandomAccessFile arq;
-    private final String nomeArquivo = "clube.db";
+    private final String nomeArquivo = "dados/clube.db";
+    public IndexDAO indexado;
 
     /**
      * Cria a classe e o arquivo, caso ele não exista, adicionando o ID = -1, para o primeiro objeto ter o ID = 0
@@ -47,7 +49,11 @@ public class CRUD {
             arq.writeChar(' '); // Escritura da Lápide do registro
             arq.writeInt(ba.length);
             arq.write(ba);
+            long enderecoPointer = arq.getFilePointer();
             arq.close();
+
+            // Adicionar os dados do objeto no arquivo de indices para busca
+            indexado.addValue((byte) id, enderecoPointer);
         } catch (IOException e) {
             System.out.println("Erro para inserir o time no arquivo!");
         }
