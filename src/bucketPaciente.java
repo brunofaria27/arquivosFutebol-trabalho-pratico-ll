@@ -4,17 +4,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+//trocar para bucket clube
+
 public class bucketPaciente implements RegistroHash<bucketPaciente> {
 
     private int id;
     private long end;
     private final short TAM = 30;
 
-    public bucketPaciente(){
+    public bucketPaciente(){ //trocar
         this(-1,0);
     }
 
-    public bucketPaciente(int id, long end){
+    public bucketPaciente(int id, long end){ //trocar
         this.id = id;
         this.end = end;
     }
