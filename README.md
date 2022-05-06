@@ -9,7 +9,7 @@
 
 
 ## `Orientações para a criação do arquivo de índices`
-- [ ] O arquivo de índices deve conter (no mínimo) o ID (do clube de futebol) e a posição do registro (referente a esse ID) no arquivo de dados. Cabe ao
+- [X] O arquivo de índices deve conter (no mínimo) o ID (do clube de futebol) e a posição do registro (referente a esse ID) no arquivo de dados. Cabe ao
 grupo definir se existe a necessidade de algum novo campo, a partir das decisões de
 implementação do grupo.
 - [ ] Sempre que acontecerem alterações no arquivo de dados, novas alterações devem ser
