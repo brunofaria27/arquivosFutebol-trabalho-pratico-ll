@@ -13,6 +13,7 @@ public class Main {
         System.out.println("5 - Atualizar dados do time");
         System.out.println("6 - Listar todos os times");
         System.out.println("7 - Mostrar arquivo de índices");
+        System.out.println("8 - Rodar simulação");
         System.out.println("0 - Sair");
     }
 
@@ -145,6 +146,8 @@ public class Main {
                         crud.readAll();
                     } else if (opcao == 7) {
                         index.showArq();
+                    } else if (opcao == 8) {
+                        //index.deleteValue();
                     }
                 }
             } while (opcao != 0);
