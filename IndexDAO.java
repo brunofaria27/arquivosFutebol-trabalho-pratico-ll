@@ -56,10 +56,8 @@ public class IndexDAO {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
             arq.seek(arq.length()); // Navegar para a última posição do arquivo
-            arq.writeChar(' '); // Escreve uma lápide para ver se o objeto existe no arquivo original
             arq.writeByte(indexArq.getId());
             arq.writeLong(indexArq.getEndereco());
-            arq.close();
         } catch (Exception e) {
             System.out.println("Erro na inserção do id e endereço no arquivo de indices.");
         }
@@ -70,17 +68,10 @@ public class IndexDAO {
      * @param index -> objeto com id e o novo endereco do arquivo de dados original, caso o objeto mude de posicao
      */
     public void updateValue(IndexDAO indexArq) {
+        //TODO: Tratar a questão caso o novo dado atualizado exclua o antigo, pois ele vai para ultima posicao, com isso tem q mudar a posicao dos demais indices na frente do att
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
 
-            while(arq.getFilePointer() < arq.length()) {
-                if(arq.readChar() == ' ') {
-                    if(arq.readByte() == indexArq.getId()) {
-                        arq.writeLong(indexArq.endereco);  // Atualiza o valor do endereço
-                        arq.close();
-                    }
-                }
-            }
         } catch (Exception e) {
             System.out.println("Falha na atualização do endereço no arquivo de indices.");
         }
@@ -92,12 +83,7 @@ public class IndexDAO {
      * @param id -> recebe da funcao CRUD.delete o id que deve ser deletado
      */
     public void deleteValue(byte id) {
-        try {
-            arq = new RandomAccessFile(nomeArquivoIndex, "rw");
-
-        } catch (Exception e) {
-            System.out.println("Falha ao deletar o objeto do arquivo de indices.");
-        }
+        
     }
 
     /**
@@ -149,15 +135,20 @@ public class IndexDAO {
             byte id;
             long endereco;
 
+            IndexDAO index;
+
             while (arq.getFilePointer() < arq.length()) {
-                if(arq.readChar() == ' ') {
-                    id = arq.readByte();
-                    endereco = arq.readLong();
-                    System.out.println("ID......: " + id + " ENDEREÇO: " + endereco);
-                }
+                id = arq.readByte();
+                endereco = arq.readLong();
+                index = new IndexDAO(id, endereco);
+                System.out.println(index);
             }
         } catch (Exception e) {
             System.out.println("Erro ao imprimir o arquivo de indices!");
         }
+    }
+
+    public String toString() {
+        return "ID......: " + this.id + " ENDEREÇO: " + this.endereco;
     }
 }
