@@ -147,7 +147,30 @@ public class Main {
                     } else if (opcao == 7) {
                         index.showArq();
                     } else if (opcao == 8) {
-                        //index.deleteValue();
+                        /* TESTE DE LEITURA EM DETERMINADA POSIÇÃO DO ARQUIVO ORIGEM
+                        try {
+                            arq = new RandomAccessFile("dados/clube.db", "rw");
+                            char lapide;
+                            byte[] b;
+                            int tam;
+                            Clube objeto;
+
+                            arq.seek(102);
+                            while(arq.getFilePointer() < arq.length()) {
+                                lapide = arq.readChar();
+                                tam = arq.readInt();
+                                b = new byte[tam];
+                                arq.read(b);
+                                if (lapide != '*') {
+                                    objeto = new Clube();
+                                    objeto.fromByteArray(b);
+                                    System.out.println(objeto);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        */
                     }
                 }
             } while (opcao != 0);

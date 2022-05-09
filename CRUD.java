@@ -46,10 +46,10 @@ public class CRUD {
             arq.seek(0); // Movendo o ponteiro para o início do arquivo para atualizar o valor do ID
             arq.writeInt(id);
             arq.seek(arq.length());
+            long enderecoPointer = arq.getFilePointer();
             arq.writeChar(' '); // Escritura da Lápide do registro
             arq.writeInt(ba.length);
             arq.write(ba);
-            long enderecoPointer = arq.getFilePointer();
             // Adicionar os dados do objeto no arquivo de indices para busca
             indexado = new IndexDAO((byte) id, enderecoPointer);
             indexado.addValue(indexado);
@@ -92,10 +92,11 @@ public class CRUD {
                     if (objeto.getId() == c.getId()) {
                         novoB = c.toByteArray();
 
-                        if (novoB.length <= tam) {
+                        if (novoB.length == tam) {
                             arq.seek(pos + 6); // Utilizado pos + 6 para que não atualize em cima da lápide nem do tamanho
                             arq.write(novoB);
                             arq.close();
+                            return true;
                         } else {
                             arq.seek(arq.length());
                             endereco = arq.getFilePointer();
@@ -106,19 +107,16 @@ public class CRUD {
                             index = new IndexDAO(c.id, endereco);
                             index.updateValue(index);
                             arq.close();
+                            return true;
                         }
-                    
-                        return true;
                     }
                 }
             }
             arq.close();
-            return false;
-
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
         }
-        
+        return false;
     }
 
     /**
@@ -132,8 +130,6 @@ public class CRUD {
             int tam;
             byte[] b;
             Clube clube;
-
-            IndexDAO index = new IndexDAO();
 
             arq = new RandomAccessFile(nomeArquivo, "rw");
             arq.seek(4); // Pular cabeçalho
@@ -150,18 +146,16 @@ public class CRUD {
                     if(clube.getId() == id) {
                         arq.seek(pos);
                         arq.writeChar('*');
-                        index.deleteValue(id);  // Deletar o objeto no arquivo de indices também
                         arq.close();
                         return true;
                     }
                 }
             }
             arq.close();
-            return false;
         } catch(IOException e) {
             System.out.println("Erro ao atualizar lápide (deletar) time!");
-            return false;
         }
+        return false;
     }
 
     /**

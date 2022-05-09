@@ -55,6 +55,7 @@ public class IndexDAO {
     public void addValue(IndexDAO indexArq) {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
+
             arq.seek(arq.length()); // Navegar para a última posição do arquivo
             arq.writeByte(indexArq.getId());
             arq.writeLong(indexArq.getEndereco());
@@ -67,14 +68,22 @@ public class IndexDAO {
      * Atualiza o endereco no arquivo de indices, depois do user atualizar no arquivo original
      * @param index -> objeto com id e o novo endereco do arquivo de dados original, caso o objeto mude de posicao
      */
-    public void updateValue(IndexDAO indexArq) {
-        //TODO: Tratar a questão caso o novo dado atualizado exclua o antigo, pois ele vai para ultima posicao, com isso tem q mudar a posicao dos demais indices na frente do att
+    public boolean updateValue(IndexDAO indexArq) {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
 
+            while(arq.getFilePointer() < arq.length()) {
+                if(arq.readByte() == indexArq.getId()) {
+                    arq.writeLong(indexArq.endereco);  // Atualiza o valor do endereço
+                    arq.close();
+                    return true;
+                }
+            }
+            arq.close();
         } catch (Exception e) {
-            System.out.println("Falha na atualização do endereço no arquivo de indices.");
+            e.printStackTrace();
         }
+        return false;
     }
 
     /**
@@ -82,8 +91,25 @@ public class IndexDAO {
      * OBS: pode-se tentar implementar algo sem a lapide diminuindo a posicao de cada insercao na posicao inserida
      * @param id -> recebe da funcao CRUD.delete o id que deve ser deletado
      */
-    public void deleteValue(byte id) {
-        
+    public boolean deleteValue(byte id) {
+        //TODO: Entender uma melhor forma para excluir o item do arquivo de indices e implementar
+        try {
+            arq = new RandomAccessFile(nomeArquivoIndex, "rw");
+
+            while(arq.getFilePointer() < arq.length()) {
+                long pos = arq.getFilePointer();
+                if(arq.readChar() == ' ') {
+                    arq.seek(pos);
+                    arq.writeChar('*');
+                    arq.close();
+                    return true;
+                }
+            }
+            arq.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -140,6 +166,7 @@ public class IndexDAO {
             while (arq.getFilePointer() < arq.length()) {
                 id = arq.readByte();
                 endereco = arq.readLong();
+
                 index = new IndexDAO(id, endereco);
                 System.out.println(index);
             }

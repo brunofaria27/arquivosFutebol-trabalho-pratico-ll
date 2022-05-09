@@ -12,7 +12,7 @@
 - [X] O arquivo de índices deve conter (no mínimo) o ID (do clube de futebol) e a posição do registro (referente a esse ID) no arquivo de dados. Cabe ao
 grupo definir se existe a necessidade de algum novo campo, a partir das decisões de
 implementação do grupo.
-- [ ] Sempre que acontecerem alterações no arquivo de dados, novas alterações devem ser
+- [X] Sempre que acontecerem alterações no arquivo de dados, novas alterações devem ser
 feitas no arquivo de índices, mantendo sempre a coerência entre esses arquivos.
 - [ ] Os arquivos que forem excluídos do arquivo de dados, devem ser excluídos dos arquivos de índices.
 - [ ] Todas as buscar sequências (por ID) feitas no TP1 devem ser substituídas por uma
