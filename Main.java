@@ -41,6 +41,8 @@ public class Main {
     public static void main(String[] args) {
         CRUD crud = new CRUD();
         IndexDAO index = new IndexDAO();
+        ListaInvertida listaInvertida = new ListaInvertida();
+
         Scanner sc = new Scanner(System.in);
         RandomAccessFile arq;
 
@@ -171,6 +173,9 @@ public class Main {
                             e.printStackTrace();
                         }
                         */
+                        String nome = "Clube Atlético Mineiro";
+                        byte idzinho = 10;
+                        listaInvertida.createArqName(nome, idzinho);
                     }
                 }
             } while (opcao != 0);
