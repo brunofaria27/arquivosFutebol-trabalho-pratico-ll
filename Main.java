@@ -176,6 +176,12 @@ public class Main {
                         String nome = "Clube Atlético Mineiro";
                         byte idzinho = 10;
                         listaInvertida.createArqName(nome, idzinho);
+                        if(listaInvertida.contemPalavra("Clube", "dados/listaInvertida/listaInvertidaNome.db") == true)
+                            System.out.println("tem clube");
+                        else if (listaInvertida.contemPalavra("Atlético", "dados/listaInvertida/listaInvertidaNome.db") == true)
+                            System.out.println("tem Atlético");
+                        else if (listaInvertida.contemPalavra("Mineiro", "dados/listaInvertida/listaInvertidaNome.db") == true)
+                            System.out.println("tem Mineiro");
                     }
                 }
             } while (opcao != 0);

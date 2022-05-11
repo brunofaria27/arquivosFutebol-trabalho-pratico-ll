@@ -4,6 +4,9 @@
 // armazena num arquivo bytes a palavra e o id que esta relacionada com ela
 // Exemplo: Galo 1, 2, 3; Mineiro 1, 2
 // tem que ter um separador de uma palavra para a outra como um ';'
+
+// OBS: Será que vale a pena tratar a questão dos IDS com array no objeto lista invertida ou vale a pena somente tratar a questao de buscar todos e ler normalmente
+
 import java.io.RandomAccessFile;
 
 import java.io.*;
@@ -12,9 +15,6 @@ public class ListaInvertida {
     private RandomAccessFile arq;
     private final String arqListaInveritidaNome = "dados/listaInvertida/listaInvertidaNome.db";
     private final String arqListaInveritidaCidade = "dados/listaInvertida/listaInvertidaCidade.db";
-    private String nome;    // nome do time
-    private String cidade;  // cidade do time
-    private byte id;        // id do time
 
     public ListaInvertida() {
         try {
@@ -37,28 +37,6 @@ public class ListaInvertida {
         }
     }
 
-    public ListaInvertida(String nome, String cidade, byte id) {
-        this.nome = nome;
-        this.cidade = cidade;
-        this.id = id;
-    }
-
-    public byte getId() {
-        return this.id;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public void setId(byte id) {
-        this.id = id;
-    }
-
     /**
      * Contar a quantidade de palavras que um nome tem
      * @param recebe o nome que deve ser pesquisado a quantidade de palvras
@@ -77,18 +55,45 @@ public class ListaInvertida {
     }
 
     /**
+     * Procura no arquivo da lista Invertida se tem a palavra
+     * @param palavra -> recebe uma palavra para ser pesquisada no arquivo
+     * @param arquivo -> recebe o nome do arquivo que deve ser pesquisado
+     * @return true se achara a palavra e false se nao achar a palavra
+     */
+    public boolean contemPalavra(String palavra, String arquivo) {
+        try {
+            arq = new RandomAccessFile(arquivo, "rw");
+
+            // Tratar a questão de readUTF com todos os ids do lado, tem que ler todos os ids para continuar lendo os UTF
+
+            while(arq.getFilePointer() < arq.length()) {
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * 
+     * @param nome
+     * @param id
      */
     public void createArqName(String nome, byte id) {
         String palavras[] = new String[contarNumeroPalavras(nome)];
         palavras = nome.split(" ");
 
+        // Tratar condições para criar caso n tenha e caso tenha
+
         try {
-            arq = new RandomAccessFile(arqListaInveritidaNome, "rw");
+            arq = new RandomAccessFile(arqListaInveritidaCidade, "rw");
 
             arq.seek(arq.length()); // Navegar para a última posição do arquivo
+            arq.writeBytes(palavras[0]);
+            arq.writeByte(id);
         } catch (Exception e) {
-            //TODO: handle exception
+            e.printStackTrace();
         }
     }
 }
