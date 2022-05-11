@@ -65,9 +65,15 @@ public class ListaInvertida {
             arq = new RandomAccessFile(arquivo, "rw");
 
             // Tratar a questão de readUTF com todos os ids do lado, tem que ler todos os ids para continuar lendo os UTF
+            arq.seek(0);
+            long pos = arq.getFilePointer();
 
             while(arq.getFilePointer() < arq.length()) {
-                
+                arq.seek(pos);
+                if(arq.readLine() == palavra) { // ta dando bosta aq, ou nao, vai q e em outro lugar
+                    return true;
+                }
+                pos++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,11 +93,37 @@ public class ListaInvertida {
         // Tratar condições para criar caso n tenha e caso tenha
 
         try {
-            arq = new RandomAccessFile(arqListaInveritidaCidade, "rw");
+            arq = new RandomAccessFile(arqListaInveritidaNome, "rw");
 
-            arq.seek(arq.length()); // Navegar para a última posição do arquivo
-            arq.writeBytes(palavras[0]);
-            arq.writeByte(id);
+            for(int i = 0; i < palavras.length; i++) {
+                if(contemPalavra(palavras[i], arqListaInveritidaNome) == true) {
+                    // somente adiciona o id
+                } else {
+                    arq.seek(arq.length());
+                    // adiciona a palavra no arquivo com o id correspondente
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * criado so para escrever no arquivo para testar
+     * @param nome
+     * @param id
+     */
+    public void createDebbug(String nome, byte id) {
+        String palavras[] = new String[contarNumeroPalavras(nome)];
+        palavras = nome.split(" ");
+
+        try {
+            arq = new RandomAccessFile(arqListaInveritidaNome, "rw");
+
+            for(int i = 0; i < palavras.length; i++) {
+                arq.writeUTF(palavras[i]);
+                arq.writeByte(id);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
