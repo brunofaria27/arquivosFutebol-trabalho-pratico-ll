@@ -75,6 +75,8 @@ public class Main {
     
                         Clube c = new Clube((byte) id, nome, cnpj, cidade);
                         crud.create(c, id);
+                        listaInvertida.createArqLista(nome, (byte) id, "dados/listaInvertida/listaInvertidaNome.db");       // Criar lista para o nome
+                        listaInvertida.createArqLista(cidade, (byte) id, "dados/listaInvertida/listaInvertidaCidade.db");   // Criar lista para a cidade
                     } else if (opcao == 2) {
                         String time1;
                         String time2;
@@ -149,46 +151,7 @@ public class Main {
                     } else if (opcao == 7) {
                         index.showArq();
                     } else if (opcao == 8) {
-                        /* TESTE DE LEITURA EM DETERMINADA POSIÇÃO DO ARQUIVO ORIGEM
-                        try {
-                            arq = new RandomAccessFile("dados/clube.db", "rw");
-                            char lapide;
-                            byte[] b;
-                            int tam;
-                            Clube objeto;
-
-                            arq.seek(102);
-                            while(arq.getFilePointer() < arq.length()) {
-                                lapide = arq.readChar();
-                                tam = arq.readInt();
-                                b = new byte[tam];
-                                arq.read(b);
-                                if (lapide != '*') {
-                                    objeto = new Clube();
-                                    objeto.fromByteArray(b);
-                                    System.out.println(objeto);
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        */
-                        String nome = "Clube Atlético Mineiro";
-                        byte idzinho = 10;
-                        listaInvertida.createDebbug(nome, idzinho);
-
-                        if(listaInvertida.contemPalavra("Clube", "dados/listaInvertida/listaInvertidaNome.db") == true) {
-                            System.out.println("tem clube");
-                        }
-
-                        if (listaInvertida.contemPalavra("Atlético", "dados/listaInvertida/listaInvertidaNome.db") == true) {
-                            System.out.println("tem Atlético");
-                        }
-
-                        if (listaInvertida.contemPalavra("Mineiro", "dados/listaInvertida/listaInvertidaNome.db") == true) {
-                            System.out.println("tem Mineiro");
-                        }
-
+                        listaInvertida.showListaInvertida();
                     }
                 }
             } while (opcao != 0);

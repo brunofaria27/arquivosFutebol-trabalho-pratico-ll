@@ -1,13 +1,5 @@
-// usuario insere um nome e uma cidade
-// lista invertida pega o nome e separa -> ex: Atletico Mineiro -> Atletico / Mineiro 
-// faz a mesma coisa do nome para a cidade
-// armazena num arquivo bytes a palavra e o id que esta relacionada com ela
-// Exemplo: Galo 1, 2, 3; Mineiro 1, 2
-// tem que ter um separador de uma palavra para a outra como um ';'
-
-// OBS: Será que vale a pena tratar a questão dos IDS com array no objeto lista invertida ou vale a pena somente tratar a questao de buscar todos e ler normalmente
-
 import java.io.RandomAccessFile;
+import java.io.File;
 
 import java.io.*;
 
@@ -16,6 +8,9 @@ public class ListaInvertida {
     private final String arqListaInveritidaNome = "dados/listaInvertida/listaInvertidaNome.db";
     private final String arqListaInveritidaCidade = "dados/listaInvertida/listaInvertidaCidade.db";
 
+    /**
+     * Função construtora, que cria os arquivos caso eles não existam com o intuito de não oferecer bugs ao programa
+     */
     public ListaInvertida() {
         try {
             boolean exists_name = (new File(arqListaInveritidaNome)).exists();
@@ -64,16 +59,20 @@ public class ListaInvertida {
         try {
             arq = new RandomAccessFile(arquivo, "rw");
 
-            // Tratar a questão de readUTF com todos os ids do lado, tem que ler todos os ids para continuar lendo os UTF
-            arq.seek(0);
-            long pos = arq.getFilePointer();
+            String palavra_arq;
 
+            arq.seek(0);
             while(arq.getFilePointer() < arq.length()) {
-                arq.seek(pos);
-                if(arq.readLine() == palavra) { // ta dando bosta aq, ou nao, vai q e em outro lugar
+                palavra_arq = arq.readUTF();
+                arq.readByte();
+                arq.readByte();
+                arq.readByte();
+                arq.readByte();
+                arq.readByte();
+                arq.readLong();
+                if(palavra.compareTo(palavra_arq) == 0) {
                     return true;
                 }
-                pos++;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,25 +81,102 @@ public class ListaInvertida {
     }
 
     /**
-     * 
-     * @param nome
-     * @param id
+     * Função para procurar a posicao no arquivo que esta livre para inserir o indice
+     * @param palavra -> palavra que foi repetida
+     * @param arquivo -> arquivo que tem que ser lido
+     * @return -> a posicao do arquivo livre
      */
-    public void createArqName(String nome, byte id) {
+    public long posIndiceLivre(String palavra, String arquivo) {
+        try {
+            arq = new RandomAccessFile(arquivo, "rw");
+
+            arq.seek(0);
+            long pos = arq.getFilePointer();
+
+            arq.seek(0);
+            while(arq.getFilePointer() < arq.length()) {
+                arq.readUTF();
+
+                // Pega a posição antes de ler para se caso o valor seja == a -1 retornar a posicao correta livre
+                pos = arq.getFilePointer();
+                if(arq.readByte() == -1) {
+                    return pos;
+                }
+
+                pos = arq.getFilePointer();
+                if (arq.readByte() == -1) {
+                    return pos;
+                }
+
+                pos = arq.getFilePointer();
+                if (arq.readByte() == -1) {
+                    return pos;
+                }
+
+                pos = arq.getFilePointer();
+                if (arq.readByte() == -1) {
+                    return pos;
+                }
+
+                pos = arq.getFilePointer();
+                if (arq.readByte() == -1) {
+                    return pos;
+                }
+
+                pos = arq.getFilePointer();
+                if (arq.readLong() == -1) {
+                    arq.seek(pos);                  // vai para a ultima posicao livre registrada
+                    arq.writeLong(arq.length());    // escreve a ultima posicao do arquivo como se fosse um ponteiro para a continuacao do array
+                    arq.seek(arq.length());         // vai para a ultima posica
+                    return arq.getFilePointer();    // retorna a ultima posicao do arquivo para criar o objeto apontado
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * Cria a lista invertida do nome e cidade do time, quando ele existe faz um ponteiro para a proxima localizacao da continuacao, pois
+     * ele so tem tamanho 5. Caso ele nao exista ele cria um normal de tamanho 5 na ultima posicao do arquivo
+     * @param nome -> nome ou cidade do time inteiro a ser inserido na lista
+     * @param id -> id do time a ser inserido na lista
+     */
+    public void createArqLista(String nome, byte id, String arquivo) {
         String palavras[] = new String[contarNumeroPalavras(nome)];
         palavras = nome.split(" ");
 
-        // Tratar condições para criar caso n tenha e caso tenha
-
         try {
-            arq = new RandomAccessFile(arqListaInveritidaNome, "rw");
+            arq = new RandomAccessFile(arquivo, "rw");
 
             for(int i = 0; i < palavras.length; i++) {
-                if(contemPalavra(palavras[i], arqListaInveritidaNome) == true) {
-                    // somente adiciona o id
+                if(contemPalavra(palavras[i], arquivo) == true) {
+                    long posAvaliable = posIndiceLivre(palavras[i], arquivo);
+
+                    if(posAvaliable != arq.length()) {
+                        arq.seek(posAvaliable);
+                        arq.writeByte(id);
+                    } else {
+                        // Temos que criar a mesma palavra novamente com o id desejado na frente
+                        arq.seek(posAvaliable);
+                        arq.writeUTF(palavras[i]);
+                        arq.writeByte(id);
+                        arq.writeByte(-1);
+                        arq.writeByte(-1);
+                        arq.writeByte(-1);
+                        arq.writeByte(-1);
+                        arq.writeLong(-1);
+                    }
                 } else {
                     arq.seek(arq.length());
-                    // adiciona a palavra no arquivo com o id correspondente
+                    arq.writeUTF(palavras[i]);
+                    arq.writeByte(id);
+                    arq.writeByte(-1);
+                    arq.writeByte(-1);
+                    arq.writeByte(-1);
+                    arq.writeByte(-1);
+                    arq.writeLong(-1); // endereço
                 }
             }
         } catch (Exception e) {
@@ -109,20 +185,21 @@ public class ListaInvertida {
     }
 
     /**
-     * criado so para escrever no arquivo para testar
-     * @param nome
-     * @param id
+     * Função apenas para msotrar a lista invertida
      */
-    public void createDebbug(String nome, byte id) {
-        String palavras[] = new String[contarNumeroPalavras(nome)];
-        palavras = nome.split(" ");
-
+    public void showListaInvertida() {
         try {
             arq = new RandomAccessFile(arqListaInveritidaNome, "rw");
 
-            for(int i = 0; i < palavras.length; i++) {
-                arq.writeUTF(palavras[i]);
-                arq.writeByte(id);
+            while(arq.getFilePointer() < arq.length()) {
+                System.out.println(arq.readUTF());
+                System.out.println(arq.readByte());
+                System.out.println(arq.readByte());
+                System.out.println(arq.readByte());
+                System.out.println(arq.readByte());
+                System.out.println(arq.readByte());
+                System.out.println(arq.readLong());
+                System.out.println("-----------------------------");
             }
         } catch (Exception e) {
             e.printStackTrace();

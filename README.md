@@ -23,9 +23,9 @@ intercalação balanceada com 2 caminhos e com a capacidade de ordenação em
 memória primária limitada a 10 registros.
 
 ## `Orientações sobre a criação da lista invertida`
-- [ ] Deve-se criar um arquivo contendo a lista invertida para o nome do clube de
+- [X] Deve-se criar um arquivo contendo a lista invertida para o nome do clube de
 futebol.
-- [ ] Deve-se criar um arquivo contendo a lista invertida para a cidade do clube de
+- [X] Deve-se criar um arquivo contendo a lista invertida para a cidade do clube de
 futebol.
 - [ ] O sistema deverá realizar alterações nas listas invertidas sempre que novos registros
 forem inseridos, alterados ou deletados no arquivo de dados.
