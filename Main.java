@@ -44,7 +44,6 @@ public class Main {
         ListaInvertida listaInvertida = new ListaInvertida();
 
         Scanner sc = new Scanner(System.in);
-        RandomAccessFile arq;
 
         try {
             byte opcao;
@@ -155,6 +154,7 @@ public class Main {
                     }
                 }
             } while (opcao != 0);
+            sc.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
