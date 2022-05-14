@@ -27,8 +27,8 @@ memória primária limitada a 10 registros.
 futebol.
 - [X] Deve-se criar um arquivo contendo a lista invertida para a cidade do clube de
 futebol.
-- [ ] O sistema deverá realizar alterações nas listas invertidas sempre que novos registros
+- [X] O sistema deverá realizar alterações nas listas invertidas sempre que novos registros
 forem inseridos, alterados ou deletados no arquivo de dados.
-- [ ] O sistema deve ser capaz de receber uma busca por nome e/ou cidade. A partir do
+- [X] O sistema deve ser capaz de receber uma busca por nome e/ou cidade. A partir do
 nome e/ou cidade digitados, o sistema deve ser capaz de retornar em quais ids de
 registros a pesquisa foi capaz de encontrar os termos informados.

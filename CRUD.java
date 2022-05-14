@@ -235,6 +235,45 @@ public class CRUD {
     }
 
     /**
+     * Procura um objeto no arquivo por id
+     * @param id -> id a ser procurado no arquivo original
+     * @return -> retorna o clube encontrado com o id desejado
+     */
+    public Clube readByIdObject(byte id) {
+        try {
+            arq = new RandomAccessFile(nomeArquivo, "rw");
+
+            char lapide;
+            byte[] b;
+            int tam;
+            Clube objeto;
+
+            arq.seek(4);
+
+            while (arq.getFilePointer() < arq.length()) {
+                lapide = arq.readChar();
+                tam = arq.readInt();
+                b = new byte[tam];
+                arq.read(b);
+
+                if (lapide != '*') {
+                    objeto = new Clube();
+                    objeto.fromByteArray(b);
+
+                    if (objeto.getId() == id) {
+                        return objeto;
+                    }
+                }
+            }
+            return null;
+
+        } catch (IOException e) {
+            System.out.println("Não foi possível encontrar o time desejado!");
+            return null;
+        }
+    }
+
+    /**
      * Cria a partida entre dois times e de acordo com o resultado altera os dados no arquivo
      * @param t1 -> nome do primeiro time
      * @param t2 -> nome do segundo time
