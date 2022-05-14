@@ -12,7 +12,7 @@ public class Main {
         System.out.println("4 - Deletar time");
         System.out.println("5 - Atualizar dados do time");
         System.out.println("6 - Listar todos os times");
-        System.out.println("7 - Mostrar arquivo de índices");
+        System.out.println("7 - Buscar na lista Invertida");
         System.out.println("8 - Rodar simulação");
         System.out.println("0 - Sair");
     }
@@ -108,8 +108,11 @@ public class Main {
                     } else if(opcao == 4) {
                         System.out.println("\nInsira o ID do usuário que deseja deletar: ");
                         byte idDel = sc.nextByte();
+                        Clube searchDel = crud.readByIdObject(idDel);
                         
                         if (crud.delete(idDel) == true) {
+                            listaInvertida.updateLista(searchDel.nome, idDel, "dados/listaInvertida/listaInvertidaNome.db", true);
+                            listaInvertida.updateLista(searchDel.cidade, idDel, "dados/listaInvertida/listaInvertidaCidade.db", true);
                             System.out.println("Time deletado com sucesso!");
                         } else {
                             System.out.println("Time não foi encontrado!");
@@ -136,6 +139,8 @@ public class Main {
                             Clube cUpd = new Clube(idUpd, nameUpd, cnpjUpd, cidadeUpd);
         
                             if (crud.update(cUpd)) {
+                                listaInvertida.updateLista(nameUpd, idUpd, "dados/listaInvertida/listaInvertidaNome.db", false);
+                                listaInvertida.updateLista(cidadeUpd, idUpd, "dados/listaInvertida/listaInvertidaCidade.db", false);
                                 System.out.println("Registro atualizado com sucesso!");
                             } else {
                                 System.out.println("Não foi possível atualizar o registro!");
@@ -148,8 +153,27 @@ public class Main {
                     } else if (opcao == 6) {
                         crud.readAll();
                     } else if (opcao == 7) {
-                        index.showArq();
+                        System.out.println("Deseja busca por nome(1) ou cidade(2)");
+                        int buscaOption = sc.nextInt();
+
+                        sc.nextLine();
+                        if(buscaOption == 1) {
+                            // busca por nome
+                            String nome;
+                            System.out.println("Digite o nome que deseja: ");
+                            nome = sc.nextLine();
+                            listaInvertida.searchList(nome, "dados/listaInvertida/listaInvertidaNome.db");
+                        } else if(buscaOption == 2) {
+                            // busca por cidade
+                            String cidade;
+                            System.out.println("Digite a cidade que deseja: ");
+                            cidade = sc.nextLine();
+                            listaInvertida.searchList(cidade, "dados/listaInvertida/listaInvertidaCidade.db");
+                        } else {
+                            System.out.println("A opcao escolhida nao foi valida");
+                        }
                     } else if (opcao == 8) {
+                        // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
                         listaInvertida.showListaInvertida();
                     }
                 }
