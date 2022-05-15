@@ -1,7 +1,7 @@
 import java.io.*;
 import java.io.IOException;
 
-public class CRUD {
+public class CRUD extends IndexDAO {
     private RandomAccessFile arq;
     private final String nomeArquivo = "dados/clube.db";
 

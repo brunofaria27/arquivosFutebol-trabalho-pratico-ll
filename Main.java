@@ -173,6 +173,7 @@ public class Main {
                             System.out.println("A opcao escolhida nao foi valida");
                         }
                     } else if (opcao == 8) {
+                        crud.buscaBinaria(24);
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
                         listaInvertida.showListaInvertida();
                     }

@@ -2,7 +2,7 @@ import java.io.RandomAccessFile;
 
 import java.io.*;
 
-public class IndexDAO {
+public class IndexDAO  {
     private RandomAccessFile arq;
     private final String nomeArquivoIndex = "dados/index/clubes_index.db";
     private byte id;
@@ -114,40 +114,62 @@ public class IndexDAO {
 
     /**
      * Realiza uma busca binaria no arquivo de indices
-     * @param id
+     * @param i
      * @return
      */
-    public long buscaBinaria(byte id) {
-        //TODO: Melhorar o algoritmo de busca binária, ainda não está funcional
+    public long buscaBinaria(int i) {
         try {
-            arq = new RandomAccessFile(nomeArquivoIndex, "rw");
+            arq = new RandomAccessFile(nomeArquivoIndex, "r");
+            long tamanhoDoArquivo = arq.length();
+            if(tamanhoDoArquivo != 0){
+                
+                System.out.println("DEBUG: Tamanho da merda do arquivo -> "+ tamanhoDoArquivo);
 
-            long tam = arq.length();
-            long dir = tam - 1; // Última posição
-            long esq = 0;   // Primeira posição
-            long meio = 0; // Guardar posição do meio
+                
 
-            while(esq <= dir) {
-                meio  = (esq + dir) / 2;
-                arq.seek(meio);
-                if(arq.readByte() <= id) {
-                    esq = meio + 1;
-                } else {
-                    dir = meio - 1;
-                }
             }
 
-            if(dir <= tam - 1 && dir >= 0) {
-                arq.seek(meio);
-                if(arq.readByte() == id) {
-                    return arq.readByte();
-                }
-            }
 
-            return -1;
+
         } catch (Exception e) {
-            System.out.println("Falha na busca binária no arquivo de indíces.");
+            //TODO: handle exception
+            System.out.println("deu ruim na binaria");
         }
+
+
+
+
+
+
+        // try {
+        //     arq = new RandomAccessFile(nomeArquivoIndex, "rw");
+
+        //     long tam = arq.length();
+        //     long dir = tam - 1; // Última posição
+        //     long esq = 0;   // Primeira posição
+        //     long meio = 0; // Guardar posição do meio
+
+        //     while(esq <= dir) {
+        //         meio  = (esq + dir) / 2;
+        //         arq.seek(meio);
+        //         if(arq.readByte() <= id) {
+        //             esq = meio + 1;
+        //         } else {
+        //             dir = meio - 1;
+        //         }
+        //     }
+
+        //     if(dir <= tam - 1 && dir >= 0) {
+        //         arq.seek(meio);
+        //         if(arq.readByte() == id) {
+        //             return arq.readByte();
+        //         }
+        //     }
+
+        //     return -1;
+        // } catch (Exception e) {
+        //     System.out.println("Falha na busca binária no arquivo de indíces.");
+        // }
         return -1;
     }
 
