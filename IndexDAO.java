@@ -57,13 +57,20 @@ public class IndexDAO  {
     public void addValue(IndexDAO indexArq) {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
-            long i = (indexArq.getId() - 1) * 9;
-            arq.seek(i);  // Navegar para a última posição do arquivo
-            arq.writeByte(indexArq.getId());
-            arq.writeLong(indexArq.getEndereco());
-            arq.close();
+
+            if(arq.length() == 0) {
+                arq.seek(0);
+                arq.writeByte(indexArq.getId());
+                arq.writeLong(indexArq.getEndereco());
+            } else {
+                long i = (indexArq.getId()) * 9;
+                arq.seek(i);  // Navegar para a última posição do arquivo
+                arq.writeByte(indexArq.getId());
+                arq.writeLong(indexArq.getEndereco());
+            }
+
         } catch (Exception e) {
-            System.out.println("Erro na inserção do id e endereço no arquivo de indices.");
+            e.printStackTrace();
         }
     }
 
@@ -94,7 +101,7 @@ public class IndexDAO  {
      * OBS: pode-se tentar implementar algo sem a lapide diminuindo a posicao de cada insercao na posicao inserida
      * @param id -> recebe da funcao CRUD.delete o id que deve ser deletado
      */
-    public boolean deleteValue(byte id) {
+    public void deleteValue(byte id) {
         //TODO: Entender uma melhor forma para excluir o item do arquivo de indices e implementar
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
@@ -107,7 +114,7 @@ public class IndexDAO  {
                     arq.seek(pos);
                     arq.writeByte(-1);
                     arq.writeLong(-1);
-                    return true;
+
                 } else {
                     arq.readLong();
                 }
@@ -115,7 +122,7 @@ public class IndexDAO  {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+
     }
 
     /**
@@ -125,65 +132,48 @@ public class IndexDAO  {
      */
     public long buscaBinaria(int idParaPesquisa) {
         try {
+            arq = new RandomAccessFile(nomeArquivoIndex, "rw"); // abre o arquivo ou cria se ele não existir
 
-            RandomAccessFile arq = new RandomAccessFile(nomeArquivoIndex, "rw"); // abre o arquivo ou cria se ele não existir
             long esq = 0, dir = arq.length() / 9, meio;
             byte idArq;
-            while(esq <= dir) {
-              meio = (int)((esq + dir) / 2);
-              arq.seek(meio * 9);
-              idArq = arq.readByte();
-              if(idParaPesquisa < idArq)
-                dir = meio - 1;
-              else if(idParaPesquisa > idArq)
-                esq = meio + 1;
-              else {
-                return arq.readLong();
-              }
+
+            while (esq <= dir) {
+                meio = (int) ((esq + dir) / 2);
+
+                arq.seek(0);
+                idArq = arq.readByte();
+                if (idParaPesquisa == idArq) {
+                    return arq.readLong();
+                }
+
+                arq.seek(meio * 9);
+
+                idArq = arq.readByte();
+
+                if (idParaPesquisa < idArq) {
+                    dir = meio - 1;
+                } else if (idParaPesquisa > idArq) {
+                    esq = meio + 1;
+                } else {
+                    long pos = arq.getFilePointer();
+                    arq.seek(pos);
+                    return arq.readLong();
+                }
             }
-            arq.close();
-          } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-          }
-          long lixo = -1;
-          return lixo;
-
-
-
-
-
-
-        // try {
-        //     arq = new RandomAccessFile(nomeArquivoIndex, "rw");
-
-        //     long tam = arq.length();
-        //     long dir = tam - 1; // Última posição
-        //     long esq = 0;   // Primeira posição
-        //     long meio = 0; // Guardar posição do meio
-
-        //     while(esq <= dir) {
-        //         meio  = (esq + dir) / 2;
-        //         arq.seek(meio);
-        //         if(arq.readByte() <= id) {
-        //             esq = meio + 1;
-        //         } else {
-        //             dir = meio - 1;
-        //         }
-        //     }
-
-        //     if(dir <= tam - 1 && dir >= 0) {
-        //         arq.seek(meio);
-        //         if(arq.readByte() == id) {
-        //             return arq.readByte();
-        //         }
-        //     }
-
-        //     return -1;
-        // } catch (Exception e) {
-        //     System.out.println("Falha na busca binária no arquivo de indíces.");
-        // }
-
+        }
+        return -1;
     }
+
+
+
+
+
+
+
+
+
 
     /**
      * Mostar o arquivo de indices para testes de funcionamento
@@ -215,7 +205,6 @@ public class IndexDAO  {
             System.out.println("Erro ao imprimir o arquivo de indices!");
         }
     }
-
     public String toString() {
         return "ID......: " + this.id + " ENDEREÇO: " + this.endereco;
     }

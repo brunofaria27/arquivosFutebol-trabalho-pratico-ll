@@ -175,10 +175,10 @@ public class Main {
                         }
                     } else if (opcao == 8) {
                         index.showArq();
-                        long pos = crud.buscaBinaria(2);
+                        long pos = crud.buscaBinaria(1);
                         System.out.println(pos);
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
-                        index.showArq();
+                       
                     }
                 }
             } while (opcao != 0);
