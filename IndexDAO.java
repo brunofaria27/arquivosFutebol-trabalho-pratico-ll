@@ -1,8 +1,10 @@
 import java.io.RandomAccessFile;
 
+
+
 import java.io.*;
 
-public class IndexDAO {
+public class IndexDAO  {
     private RandomAccessFile arq;
     private final String nomeArquivoIndex = "dados/index/clubes_index.db";
     private byte id;
@@ -55,10 +57,11 @@ public class IndexDAO {
     public void addValue(IndexDAO indexArq) {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
-
-            arq.seek(arq.length()); // Navegar para a última posição do arquivo
+            long i = (indexArq.getId() - 1) * 9;
+            arq.seek(i);  // Navegar para a última posição do arquivo
             arq.writeByte(indexArq.getId());
             arq.writeLong(indexArq.getEndereco());
+            arq.close();
         } catch (Exception e) {
             System.out.println("Erro na inserção do id e endereço no arquivo de indices.");
         }
@@ -117,41 +120,69 @@ public class IndexDAO {
 
     /**
      * Realiza uma busca binaria no arquivo de indices
-     * @param id
+     * @param i
      * @return
      */
-    public long buscaBinaria(byte id) {
-        //TODO: Melhorar o algoritmo de busca binária, ainda não está funcional
+    public long buscaBinaria(int idParaPesquisa) {
         try {
-            arq = new RandomAccessFile(nomeArquivoIndex, "rw");
 
-            long tam = arq.length();
-            long dir = tam - 1; // Última posição
-            long esq = 0;   // Primeira posição
-            long meio = 0; // Guardar posição do meio
-
+            RandomAccessFile arq = new RandomAccessFile(nomeArquivoIndex, "rw"); // abre o arquivo ou cria se ele não existir
+            long esq = 0, dir = arq.length() / 9, meio;
+            byte idArq;
             while(esq <= dir) {
-                meio  = (esq + dir) / 2;
-                arq.seek(meio);
-                if(arq.readByte() <= id) {
-                    esq = meio + 1;
-                } else {
-                    dir = meio - 1;
-                }
+              meio = (int)((esq + dir) / 2);
+              arq.seek(meio * 9);
+              idArq = arq.readByte();
+              if(idParaPesquisa < idArq)
+                dir = meio - 1;
+              else if(idParaPesquisa > idArq)
+                esq = meio + 1;
+              else {
+                return arq.readLong();
+              }
             }
+            arq.close();
+          } catch(Exception e) {
+            e.printStackTrace();
+          }
+          long lixo = -1;
+          return lixo;
 
-            if(dir <= tam - 1 && dir >= 0) {
-                arq.seek(meio);
-                if(arq.readByte() == id) {
-                    return arq.readByte();
-                }
-            }
 
-            return -1;
-        } catch (Exception e) {
-            System.out.println("Falha na busca binária no arquivo de indíces.");
-        }
-        return -1;
+
+
+
+
+        // try {
+        //     arq = new RandomAccessFile(nomeArquivoIndex, "rw");
+
+        //     long tam = arq.length();
+        //     long dir = tam - 1; // Última posição
+        //     long esq = 0;   // Primeira posição
+        //     long meio = 0; // Guardar posição do meio
+
+        //     while(esq <= dir) {
+        //         meio  = (esq + dir) / 2;
+        //         arq.seek(meio);
+        //         if(arq.readByte() <= id) {
+        //             esq = meio + 1;
+        //         } else {
+        //             dir = meio - 1;
+        //         }
+        //     }
+
+        //     if(dir <= tam - 1 && dir >= 0) {
+        //         arq.seek(meio);
+        //         if(arq.readByte() == id) {
+        //             return arq.readByte();
+        //         }
+        //     }
+
+        //     return -1;
+        // } catch (Exception e) {
+        //     System.out.println("Falha na busca binária no arquivo de indíces.");
+        // }
+
     }
 
     /**
