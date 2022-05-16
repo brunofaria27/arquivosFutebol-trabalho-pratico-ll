@@ -1,5 +1,7 @@
 import java.io.RandomAccessFile;
 
+
+
 import java.io.*;
 
 public class IndexDAO  {
@@ -117,16 +119,72 @@ public class IndexDAO  {
      * @param i
      * @return
      */
-    public long buscaBinaria(int i) {
+    public long buscaBinaria(int idParaPesquisa) {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "r");
             long tamanhoDoArquivo = arq.length();
-            if(tamanhoDoArquivo != 0){
-                
-                System.out.println("DEBUG: Tamanho da merda do arquivo -> "+ tamanhoDoArquivo);
+            long direitaDoArquivo = tamanhoDoArquivo - 1;
+            long esquerdaDoArquivo = 0;
+            long meioDoArquivo = 0;
+            long posNoArquivoDeDados = 0;
+            
+            if(tamanhoDoArquivo != 0){  
+                System.out.println();
+                System.out.println("------------------DEBUG 1------------------");
+                System.out.println("DEBUG: Meio da merda do Arquivo -> "+      meioDoArquivo);
+                System.out.println("DEBUG: direita da merda do Arquivo -> "+   direitaDoArquivo);
+                System.out.println("DEBUG: esquerda da merda do Arquivo -> "+  esquerdaDoArquivo);
+                System.out.println("------------------DEBUG 1------------------");
+                System.out.println();
 
-                
+                //Separar o arquivo em bloco de byte e long
+                // separa  o bloco
 
+                while(esquerdaDoArquivo <= direitaDoArquivo) {
+                    meioDoArquivo = (esquerdaDoArquivo + direitaDoArquivo) / 2;
+
+                    arq.seek(meioDoArquivo);
+
+                    if(arq.readByte() <= idParaPesquisa) {
+                        System.out.println("teste " + arq.read());
+                      esquerdaDoArquivo = meioDoArquivo + 1;
+                    } else {
+                        direitaDoArquivo = meioDoArquivo - 1;
+                    }
+
+                    System.out.println();
+                    System.out.println("------------------DEBUG 2------------------");
+                    System.out.println("DEBUG: Meio da merda do Arquivo -> "+meioDoArquivo);
+                    System.out.println("DEBUG CONTEUDO: " + arq.readByte());
+                    arq.seek(meioDoArquivo);
+                    System.out.println("-------------------------------------------");
+                    System.out.println("DEBUG: direita da merda do Arquivo -> "+   direitaDoArquivo);
+                    System.out.println("DEBUG: esquerda da merda do Arquivo -> "+  esquerdaDoArquivo);
+                    System.out.println("------------------DEBUG 2------------------");
+                    System.out.println();
+
+                }
+
+                if(direitaDoArquivo <= tamanhoDoArquivo - 1 && direitaDoArquivo >= 0) {
+                    arq.seek(meioDoArquivo);
+
+                    if(arq.readByte() == idParaPesquisa) {
+
+                        arq.seek(meioDoArquivo);
+                        posNoArquivoDeDados = arq.readByte();
+
+                        System.out.println();
+                        System.out.println("------------------DEBUG 3------------------");
+                        System.out.println("DEBUG: "+ posNoArquivoDeDados);
+                        System.out.println("------------------DEBUG 3------------------");
+                        System.out.println();
+
+                        return posNoArquivoDeDados;
+                     }
+                 }
+
+            }else{
+                System.out.println("Sem arquivo");
             }
 
 
