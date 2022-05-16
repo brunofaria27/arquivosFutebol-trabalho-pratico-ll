@@ -57,10 +57,11 @@ public class IndexDAO  {
     public void addValue(IndexDAO indexArq) {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
-
-            arq.seek(arq.length()); // Navegar para a última posição do arquivo
+            long i = (indexArq.getId() - 1) * 9;
+            arq.seek(i);  // Navegar para a última posição do arquivo
             arq.writeByte(indexArq.getId());
             arq.writeLong(indexArq.getEndereco());
+            arq.close();
         } catch (Exception e) {
             System.out.println("Erro na inserção do id e endereço no arquivo de indices.");
         }
@@ -121,85 +122,28 @@ public class IndexDAO  {
      */
     public long buscaBinaria(int idParaPesquisa) {
         try {
-            arq = new RandomAccessFile(nomeArquivoIndex, "r");
-            long tamanhoDoArquivo = arq.length();
-            long direitaDoArquivo = tamanhoDoArquivo - 1;
-            long esquerdaDoArquivo = 0;
-            long meioDoArquivo = 0;
-            long posNoArquivoDeDados = 0;
-            
-            if(tamanhoDoArquivo != 0){  
-                System.out.println();
-                System.out.println("------------------DEBUG 1------------------");
-                System.out.println("DEBUG: Meio da merda do Arquivo -> "+      meioDoArquivo);
-                System.out.println("DEBUG: direita da merda do Arquivo -> "+   direitaDoArquivo);
-                System.out.println("DEBUG: esquerda da merda do Arquivo -> "+  esquerdaDoArquivo);
-                System.out.println("------------------DEBUG 1------------------");
-                System.out.println();
 
-                //Separar o arquivo em bloco de byte e long
-                // separa  o bloco
-
-                while(esquerdaDoArquivo <= direitaDoArquivo) {
-                    meioDoArquivo = (esquerdaDoArquivo + direitaDoArquivo) / 2;
-                    System.out.println("------------------DEBUG teste------------------");
-                    
-                    System.out.println(meioDoArquivo);
-                    System.out.println(tamanhoDoArquivo);
-                    System.out.println("------------------DEBUG teste------------------");
-
-                    arq.seek(meioDoArquivo);
-
-                    if(arq.readByte() <= idParaPesquisa) {
-                        System.out.println("teste " + arq.read());
-                      esquerdaDoArquivo = meioDoArquivo + 1;
-                    } else {
-                        direitaDoArquivo = meioDoArquivo - 1;
-                    }
-
-                    System.out.println();
-                    System.out.println("------------------DEBUG 2------------------");
-                    System.out.println("DEBUG: Meio da merda do Arquivo -> "+meioDoArquivo);
-                    System.out.println("DEBUG CONTEUDO: " + arq.readByte());
-                    arq.seek(meioDoArquivo+1);
-                    System.out.println("DEBUG pos-1: " + arq.readByte());
-                    arq.seek(meioDoArquivo);
-                    System.out.println("-------------------------------------------");
-                    System.out.println("DEBUG: direita da merda do Arquivo -> "+   direitaDoArquivo);
-                    System.out.println("DEBUG: esquerda da merda do Arquivo -> "+  esquerdaDoArquivo);
-                    System.out.println("------------------DEBUG 2------------------");
-                    System.out.println();
-
-                }
-
-                if(direitaDoArquivo <= tamanhoDoArquivo - 1 && direitaDoArquivo >= 0) {
-                    arq.seek(meioDoArquivo);
-
-                    if(arq.readByte() == idParaPesquisa) {
-
-                        arq.seek(meioDoArquivo);
-                        posNoArquivoDeDados = arq.readByte();
-
-                        System.out.println();
-                        System.out.println("------------------DEBUG 3------------------");
-                        System.out.println("DEBUG: "+ posNoArquivoDeDados);
-                        System.out.println("------------------DEBUG 3------------------");
-                        System.out.println();
-
-                        return posNoArquivoDeDados;
-                     }
-                 }
-
-            }else{
-                System.out.println("Sem arquivo");
+            RandomAccessFile arq = new RandomAccessFile(nomeArquivoIndex, "rw"); // abre o arquivo ou cria se ele não existir
+            long esq = 0, dir = arq.length() / 9, meio;
+            byte idArq;
+            while(esq <= dir) {
+              meio = (int)((esq + dir) / 2);
+              arq.seek(meio * 9);
+              idArq = arq.readByte();
+              if(idParaPesquisa < idArq)
+                dir = meio - 1;
+              else if(idParaPesquisa > idArq)
+                esq = meio + 1;
+              else {
+                return arq.readLong();
+              }
             }
-
-
-
-        } catch (Exception e) {
-            //TODO: handle exception
-            System.out.println("deu ruim na binaria");
-        }
+            arq.close();
+          } catch(Exception e) {
+            e.printStackTrace();
+          }
+          long lixo = -1;
+          return lixo;
 
 
 
@@ -235,7 +179,7 @@ public class IndexDAO  {
         // } catch (Exception e) {
         //     System.out.println("Falha na busca binária no arquivo de indíces.");
         // }
-        return -1;
+
     }
 
     /**

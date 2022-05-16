@@ -174,31 +174,10 @@ public class Main {
                         }
                     } else if (opcao == 8) {
                         index.showArq();
-                        crud.buscaBinaria(2);
+                        long pos = crud.buscaBinaria(2);
+                        System.out.println(pos);
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
                         //listaInvertida.showListaInvertida();
-
-                        try {
-                            arq = new RandomAccessFile("dados/clube.db", "rw");
-                            char lapide;
-                            byte[] b;
-                            int tam;
-                            Clube objeto;
-                            arq.seek(102);
-                            while(arq.getFilePointer() < arq.length()) {
-                                lapide = arq.readChar();
-                                tam = arq.readInt();
-                                b = new byte[tam];
-                                arq.read(b);
-                                if (lapide != '*') {
-                                    objeto = new Clube();
-                                    objeto.fromByteArray(b);
-                                    System.out.println(objeto);
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                         
                     }
                 }
