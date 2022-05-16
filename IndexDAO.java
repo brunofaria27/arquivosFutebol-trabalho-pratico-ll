@@ -142,6 +142,11 @@ public class IndexDAO  {
 
                 while(esquerdaDoArquivo <= direitaDoArquivo) {
                     meioDoArquivo = (esquerdaDoArquivo + direitaDoArquivo) / 2;
+                    System.out.println("------------------DEBUG teste------------------");
+                    
+                    System.out.println(meioDoArquivo);
+                    System.out.println(tamanhoDoArquivo);
+                    System.out.println("------------------DEBUG teste------------------");
 
                     arq.seek(meioDoArquivo);
 
@@ -156,6 +161,8 @@ public class IndexDAO  {
                     System.out.println("------------------DEBUG 2------------------");
                     System.out.println("DEBUG: Meio da merda do Arquivo -> "+meioDoArquivo);
                     System.out.println("DEBUG CONTEUDO: " + arq.readByte());
+                    arq.seek(meioDoArquivo+1);
+                    System.out.println("DEBUG pos-1: " + arq.readByte());
                     arq.seek(meioDoArquivo);
                     System.out.println("-------------------------------------------");
                     System.out.println("DEBUG: direita da merda do Arquivo -> "+   direitaDoArquivo);

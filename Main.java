@@ -177,6 +177,29 @@ public class Main {
                         crud.buscaBinaria(2);
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
                         //listaInvertida.showListaInvertida();
+
+                        try {
+                            arq = new RandomAccessFile("dados/clube.db", "rw");
+                            char lapide;
+                            byte[] b;
+                            int tam;
+                            Clube objeto;
+                            arq.seek(102);
+                            while(arq.getFilePointer() < arq.length()) {
+                                lapide = arq.readChar();
+                                tam = arq.readInt();
+                                b = new byte[tam];
+                                arq.read(b);
+                                if (lapide != '*') {
+                                    objeto = new Clube();
+                                    objeto.fromByteArray(b);
+                                    System.out.println(objeto);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        
                     }
                 }
             } while (opcao != 0);
