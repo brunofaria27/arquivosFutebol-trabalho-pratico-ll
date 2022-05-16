@@ -111,6 +111,7 @@ public class Main {
                         Clube searchDel = crud.readByIdObject(idDel);
                         
                         if (crud.delete(idDel) == true) {
+                            index.deleteValue((byte) idDel);
                             listaInvertida.updateLista(searchDel.nome, idDel, "dados/listaInvertida/listaInvertidaNome.db", true);
                             listaInvertida.updateLista(searchDel.cidade, idDel, "dados/listaInvertida/listaInvertidaCidade.db", true);
                             System.out.println("Time deletado com sucesso!");
@@ -174,7 +175,7 @@ public class Main {
                         }
                     } else if (opcao == 8) {
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
-                        listaInvertida.showListaInvertida();
+                        index.showArq();
                     }
                 }
             } while (opcao != 0);

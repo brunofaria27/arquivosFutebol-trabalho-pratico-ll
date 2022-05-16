@@ -96,16 +96,19 @@ public class IndexDAO {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
 
+            long pos;
+
             while(arq.getFilePointer() < arq.length()) {
-                long pos = arq.getFilePointer();
-                if(arq.readChar() == ' ') {
+                pos = arq.getFilePointer();
+                if(arq.readByte() == id) {
                     arq.seek(pos);
-                    arq.writeChar('*');
-                    arq.close();
+                    arq.writeByte(-1);
+                    arq.writeLong(-1);
                     return true;
+                } else {
+                    arq.readLong();
                 }
             }
-            arq.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -158,17 +161,24 @@ public class IndexDAO {
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
 
-            byte id;
-            long endereco;
+            byte id = 0;
+            long endereco = 0;
+            long pos;
 
             IndexDAO index;
 
             while (arq.getFilePointer() < arq.length()) {
-                id = arq.readByte();
-                endereco = arq.readLong();
+                pos = arq.getFilePointer();
+                if(arq.readByte() == -1) {
+                    arq.readLong();
+                } else {
+                    arq.seek(pos);
+                    id = arq.readByte();
+                    endereco = arq.readLong();
+                    index = new IndexDAO(id, endereco);
+                    System.out.println(index);
+                }
 
-                index = new IndexDAO(id, endereco);
-                System.out.println(index);
             }
         } catch (Exception e) {
             System.out.println("Erro ao imprimir o arquivo de indices!");

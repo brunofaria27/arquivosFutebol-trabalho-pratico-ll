@@ -14,7 +14,7 @@ grupo definir se existe a necessidade de algum novo campo, a partir das decisõe
 implementação do grupo.
 - [X] Sempre que acontecerem alterações no arquivo de dados, novas alterações devem ser
 feitas no arquivo de índices, mantendo sempre a coerência entre esses arquivos.
-- [ ] Os arquivos que forem excluídos do arquivo de dados, devem ser excluídos dos arquivos de índices.
+- [X] Os arquivos que forem excluídos do arquivo de dados, devem ser excluídos dos arquivos de índices.
 - [ ] Todas as buscar sequências (por ID) feitas no TP1 devem ser substituídas por uma
 busca binária feita no arquivo de índices.
 - [ ] Para manter a ordenação do arquivo de índices, deve ser implementada uma
