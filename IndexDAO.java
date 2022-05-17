@@ -85,11 +85,9 @@ public class IndexDAO  {
             while(arq.getFilePointer() < arq.length()) {
                 if(arq.readByte() == indexArq.getId()) {
                     arq.writeLong(indexArq.endereco);  // Atualiza o valor do endereço
-                    arq.close();
                     return true;
                 }
             }
-            arq.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +100,6 @@ public class IndexDAO  {
      * @param id -> recebe da funcao CRUD.delete o id que deve ser deletado
      */
     public void deleteValue(byte id) {
-        //TODO: Entender uma melhor forma para excluir o item do arquivo de indices e implementar
         try {
             arq = new RandomAccessFile(nomeArquivoIndex, "rw");
 

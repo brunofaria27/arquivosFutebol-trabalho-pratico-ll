@@ -112,8 +112,8 @@ public class Main {
                         
                         if (crud.delete(idDel) == true) {
                             index.deleteValue((byte) idDel);
-                            listaInvertida.updateLista(searchDel.nome, idDel, "dados/listaInvertida/listaInvertidaNome.db", true);
-                            listaInvertida.updateLista(searchDel.cidade, idDel, "dados/listaInvertida/listaInvertidaCidade.db", true);
+                            //listaInvertida.updateLista(searchDel.nome, idDel, "dados/listaInvertida/listaInvertidaNome.db", true);
+                            //listaInvertida.updateLista(searchDel.cidade, idDel, "dados/listaInvertida/listaInvertidaCidade.db", true);
                             System.out.println("Time deletado com sucesso!");
                         } else {
                             System.out.println("Time não foi encontrado!");
@@ -175,7 +175,11 @@ public class Main {
                         }
                     } else if (opcao == 8) {
                         index.showArq();
-                        long pos = crud.buscaBinaria(1);
+                        long pos = crud.buscaBinaria(0);
+                        System.out.println(pos);
+                        pos = crud.buscaBinaria(2);
+                        System.out.println(pos);
+                        pos = crud.buscaBinaria(3);
                         System.out.println(pos);
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
                        
