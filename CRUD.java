@@ -162,39 +162,45 @@ public class CRUD extends IndexDAO {
      * Metódo utilizado para retornar o time de futebol e suas caracteristicas desejadas, buscando pelo ID
      * @param id -> id passado pelo usuário para retornar o clube
      */
-    public boolean readById(byte id) {
+    public Clube readId(byte id) {
+        Clube clube = new Clube((byte) 0, "", "", "");
+
         try {
             arq = new RandomAccessFile(nomeArquivo, "rw");
 
             char lapide;
             byte[] b;
             int tam;
-            Clube objeto;
-
-            arq.seek(4);
-
-            while (arq.getFilePointer() < arq.length()) {
+            
+            if(idExists(id)) {
+                long posOriginal = buscaBinaria((int) id);
+                arq.seek(posOriginal);
                 lapide = arq.readChar();
                 tam = arq.readInt();
                 b = new byte[tam];
                 arq.read(b);
-
                 if (lapide != '*') {
-                    objeto = new Clube();
-                    objeto.fromByteArray(b);
-
-                    if (objeto.getId() == id) {
-                        System.out.println(objeto);
-                        return true;
-                    }
+                    clube = new Clube();
+                    clube.fromByteArray(b);
+                    return clube;
                 }
             }
-            return false;
-
         } catch (IOException e) {
-            System.out.println("Não foi possível encontrar o time desejado!");
-            return false;
+            e.printStackTrace();
         }
+        return clube;
+    }
+
+    /**
+     * Confere se o ID existe no arquivo original e se não está deletado
+     * @param id -> id a ser conferido
+     * @return -> verdadeiro se o id existir e falso se nao existir
+     */
+    public boolean idExists(byte id) {
+        if(buscaBinaria(id) != -1) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -235,45 +241,6 @@ public class CRUD extends IndexDAO {
     }
 
     /**
-     * Procura um objeto no arquivo por id
-     * @param id -> id a ser procurado no arquivo original
-     * @return -> retorna o clube encontrado com o id desejado
-     */
-    public Clube readByIdObject(byte id) {
-        try {
-            arq = new RandomAccessFile(nomeArquivo, "rw");
-
-            char lapide;
-            byte[] b;
-            int tam;
-            Clube objeto;
-
-            arq.seek(4);
-
-            while (arq.getFilePointer() < arq.length()) {
-                lapide = arq.readChar();
-                tam = arq.readInt();
-                b = new byte[tam];
-                arq.read(b);
-
-                if (lapide != '*') {
-                    objeto = new Clube();
-                    objeto.fromByteArray(b);
-
-                    if (objeto.getId() == id) {
-                        return objeto;
-                    }
-                }
-            }
-            return null;
-
-        } catch (IOException e) {
-            System.out.println("Não foi possível encontrar o time desejado!");
-            return null;
-        }
-    }
-
-    /**
      * Cria a partida entre dois times e de acordo com o resultado altera os dados no arquivo
      * @param t1 -> nome do primeiro time
      * @param t2 -> nome do segundo time
@@ -295,13 +262,13 @@ public class CRUD extends IndexDAO {
             c1.updPoints(1);
             c2.updPoints(1);
         }
+
         if (update(c1) && update(c2)) {
             System.out.println("\nPartida registrada e dados alterados com sucesso!");
         } else {
             System.out.println("\nNão foi possível registrar a partida e/ou alterar os dados!");
         }
     }
-
 
     /**
      * Imprime todos os clubes do arquivo para o usuário

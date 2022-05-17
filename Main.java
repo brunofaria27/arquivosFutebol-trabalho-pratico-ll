@@ -100,20 +100,23 @@ public class Main {
                         }
                     } else if(opcao == 3) {
                         byte idSearch;
+                        Clube clube;
     
                         System.out.println("\nInsira o ID que deseja pesquisar: ");
                         idSearch = sc.nextByte();
                         
-                        crud.readById(idSearch);
+                        clube = crud.readId(idSearch);
+                        if(crud.idExists(idSearch)) {
+                            System.out.println(clube);
+                        } else {
+                            System.out.println("O id inserido não existe.");
+                        }
                     } else if(opcao == 4) {
                         System.out.println("\nInsira o ID do usuário que deseja deletar: ");
                         byte idDel = sc.nextByte();
-                        Clube searchDel = crud.readByIdObject(idDel);
                         
                         if (crud.delete(idDel) == true) {
                             index.deleteValue((byte) idDel);
-                            //listaInvertida.updateLista(searchDel.nome, idDel, "dados/listaInvertida/listaInvertidaNome.db", true);
-                            //listaInvertida.updateLista(searchDel.cidade, idDel, "dados/listaInvertida/listaInvertidaCidade.db", true);
                             System.out.println("Time deletado com sucesso!");
                         } else {
                             System.out.println("Time não foi encontrado!");
@@ -123,11 +126,13 @@ public class Main {
                         String nameUpd;
                         String cnpjUpd;
                         String cidadeUpd;
+
+                        Clube clubeVazio = new Clube((byte) 0, "", "", "");
                         
                         System.out.print("\nInsira o ID do time que deseja alterar: ");
                         idUpd = sc.nextByte();
     
-                        if (crud.readById(idUpd)) {
+                        if (crud.readId(idUpd) != clubeVazio) {
                             System.out.println("\n***Insira a seguir os novos dados***\n");
                             sc.nextLine();  // Pegar enter
                             System.out.print("Nome: ");
@@ -175,14 +180,6 @@ public class Main {
                         }
                     } else if (opcao == 8) {
                         index.showArq();
-                        long pos = crud.buscaBinaria(0);
-                        System.out.println(pos);
-                        pos = crud.buscaBinaria(2);
-                        System.out.println(pos);
-                        pos = crud.buscaBinaria(3);
-                        System.out.println(pos);
-                        // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
-                       
                     }
                 }
             } while (opcao != 0);

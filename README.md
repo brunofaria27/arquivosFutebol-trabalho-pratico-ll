@@ -15,7 +15,7 @@ implementação do grupo.
 - [X] Sempre que acontecerem alterações no arquivo de dados, novas alterações devem ser
 feitas no arquivo de índices, mantendo sempre a coerência entre esses arquivos.
 - [X] Os arquivos que forem excluídos do arquivo de dados, devem ser excluídos dos arquivos de índices.
-- [ ] Todas as buscar sequências (por ID) feitas no TP1 devem ser substituídas por uma
+- [X] Todas as buscar sequências (por ID) feitas no TP1 devem ser substituídas por uma
 busca binária feita no arquivo de índices.
 - [ ] Para manter a ordenação do arquivo de índices, deve ser implementada uma
 ordenação externa do arquivo em ordem crescente pelo ID, utilizando o método de

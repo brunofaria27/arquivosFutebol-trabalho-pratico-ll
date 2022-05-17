@@ -1,7 +1,5 @@
 import java.io.RandomAccessFile;
 
-
-
 import java.io.*;
 
 public class IndexDAO  {
@@ -119,13 +117,12 @@ public class IndexDAO  {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
      * Realiza uma busca binaria no arquivo de indices
-     * @param i
-     * @return
+     * @param idParaPesquisa -> recebe o id que deve ser pesquisado no arquivo de indices
+     * @return -> retorna a posicao do objeto no arquivo original
      */
     public long buscaBinaria(int idParaPesquisa) {
         try {
@@ -163,15 +160,6 @@ public class IndexDAO  {
         return -1;
     }
 
-
-
-
-
-
-
-
-
-
     /**
      * Mostar o arquivo de indices para testes de funcionamento
      */
@@ -202,6 +190,7 @@ public class IndexDAO  {
             System.out.println("Erro ao imprimir o arquivo de indices!");
         }
     }
+
     public String toString() {
         return "ID......: " + this.id + " ENDEREÇO: " + this.endereco;
     }
