@@ -175,8 +175,10 @@ public class Main {
                         }
                     } else if (opcao == 8) {
                         index.showArq();
-                        long pos = crud.buscaBinaria(1);
-                        System.out.println(pos);
+                        System.out.print("Digite o ID: ");
+                        int idLido = sc.nextInt();
+                        long pos = crud.buscaBinaria(idLido);
+                        System.out.println("O id " + idLido + " está na pos " + pos);
                         // Opcao 8 foi disponibilizada para auxiliar no debbug das atividades
                        
                     }
