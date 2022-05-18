@@ -11,7 +11,7 @@ public class Clube {
     protected String cidade;
     protected byte partidasJogadas;
     protected byte pontos;
-    public int tam;
+
 
     public Clube(byte i, String n, String cnpj, String c) {
         this.id = i;
