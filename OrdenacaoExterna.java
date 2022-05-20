@@ -1,7 +1,10 @@
 import java.io.*;
 
 public class OrdenacaoExterna {
-    void OrdeneExterno()
+
+}
+/*
+void OrdeneExterno()
 { int NBlocos = 0;
   ArqEntradaTipo ArqEntrada, ArqSaida;
   ArqEntradaTipo[OrdemIntercalConst] ArrArqEnt;
@@ -9,7 +12,7 @@ public class OrdenacaoExterna {
   int Low, High, Lim;
   NBlocos = 0;
   ArqEntrada = abrir arquivo a ser ordenado;
-  do   /*Formacao inicial dos NBlocos ordenados */
+  do   *Formacao inicial dos NBlocos ordenados *
     { NBlocos++;
       Fim = EnchePaginas(NBlocos, ArqEntrada);
       OrdeneInterno;
@@ -20,7 +23,7 @@ public class OrdenacaoExterna {
   fclose(ArqEntrada);
   Low = 0;
   High = NBlocos-1;
-  while (Low < High) /* Intercalacao dos NBlocos ordenados */
+  while (Low < High) /* Intercalacao dos NBlocos ordenados *
     { Lim = Minimo(Low + OrdemIntercalConst-1, High);
       AbreArqEntrada(ArrArqEnt, Low, Lim);
       High++;
@@ -35,4 +38,4 @@ public class OrdenacaoExterna {
     }
   Mudar o nome do arquivo High para o nome fornecido pelo usuario;
 }
-}
+*/

@@ -127,13 +127,17 @@ public class Main {
                         String cnpjUpd;
                         String cidadeUpd;
 
+                        Clube clubePrint;
                         Clube clubeVazio = new Clube((byte) 0, "", "", "");
                         
                         System.out.print("\nInsira o ID do time que deseja alterar: ");
                         idUpd = sc.nextByte();
+
+                        clubePrint = crud.readId(idUpd);
+                        System.out.print(clubePrint);
     
                         if (crud.readId(idUpd) != clubeVazio) {
-                            System.out.println("\n***Insira a seguir os novos dados***\n");
+                            System.out.println("\n\n***Insira a seguir os novos dados***\n");
                             sc.nextLine();  // Pegar enter
                             System.out.print("Nome: ");
                             nameUpd = sc.nextLine();
