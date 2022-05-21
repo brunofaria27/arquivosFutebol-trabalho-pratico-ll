@@ -42,6 +42,7 @@ public class Main {
         CRUD crud = new CRUD();
         IndexDAO index = new IndexDAO();
         ListaInvertida listaInvertida = new ListaInvertida();
+        OrdenacaoExterna ordenacao = new OrdenacaoExterna();
 
         Scanner sc = new Scanner(System.in);
 
@@ -183,7 +184,7 @@ public class Main {
                             System.out.println("A opcao escolhida nao foi valida");
                         }
                     } else if (opcao == 8) {
-                        index.showArq();
+                        ordenacao.intercalacaoBalanceada(10, 2);
                     }
                 }
             } while (opcao != 0);
