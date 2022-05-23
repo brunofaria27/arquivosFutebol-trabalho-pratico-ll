@@ -1,1 +1,0 @@
-Versão que a ordenação externa não deu certo. Além disso arrumei alguns erros de digitacão no texto.
